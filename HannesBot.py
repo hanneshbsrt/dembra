@@ -35,7 +35,7 @@ def csv_to_pdf(df, output_file):
     return output_file
 
 # Streamlit App
-st.title("CSV zu PDF Konverter")
+st.title("Offene Belege zu Kommissionierschein")
 uploaded_file = st.file_uploader("Lade eine CSV-Datei hoch", type=["csv"])
 
 if uploaded_file is not None:
