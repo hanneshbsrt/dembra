@@ -6,8 +6,8 @@ def csv_to_pdf(df, output_file):
     # Auftragsmenge in numerischen Wert umwandeln
     df["Auftragsmenge"] = df["Auftragsmenge"].astype(str).str.replace(",", ".").astype(float)
     
-    # Artikel zusammenfassen
-    summary = df.groupby("Pos-Bezeichnung", as_index=False)["Auftragsmenge"].sum()
+    # Artikel zusammenfassen inkl. Einheit
+    summary = df.groupby(["Pos-Bezeichnung", "Einheit"], as_index=False)["Auftragsmenge"].sum()
     
     # PDF erstellen
     pdf = FPDF()
@@ -19,14 +19,16 @@ def csv_to_pdf(df, output_file):
     
     # Tabellenkopf
     pdf.set_font("Arial", style="B", size=12)
-    pdf.cell(140, 10, "Artikel", border=1)
-    pdf.cell(40, 10, "Menge", border=1, ln=True)
+    pdf.cell(100, 10, "Artikel", border=1)
+    pdf.cell(40, 10, "Menge", border=1)
+    pdf.cell(40, 10, "Einheit", border=1, ln=True)
     
     # Tabellendaten
     pdf.set_font("Arial", size=10)
     for index, row in summary.iterrows():
-        pdf.cell(140, 10, row["Pos-Bezeichnung"], border=1)
-        pdf.cell(40, 10, str(row["Auftragsmenge"]), border=1, ln=True)
+        pdf.cell(100, 10, row["Pos-Bezeichnung"], border=1)
+        pdf.cell(40, 10, str(row["Auftragsmenge"]), border=1)
+        pdf.cell(40, 10, row["Einheit"], border=1, ln=True)
     
     # PDF speichern
     pdf.output(output_file)
